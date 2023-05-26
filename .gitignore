@@ -77,3 +77,6 @@ Thumbs.db
 cmake-build-debug
 CMakeLists.txt
 .idea
+
+templates/*
+examples/*

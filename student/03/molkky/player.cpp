@@ -1,47 +1,40 @@
 #include "player.hh"
-#include <cstdlib>
-#include <iostream>
 #include <string>
+#include <iostream>
 
+using namespace std;
 
-int main()
+Player::Player(const string name):
+    name_(name)
 {
-    Player player1 = Player("Matti");
-    Player player2 = Player("Teppo");
-    Player* in_turn = 0;
 
-    int turn = 1;
-    while (true)
-    {
-        if (turn % 2 != 0)
-        {
-            in_turn = &player1;
-        }
-        else
-        {
-            in_turn = &player2;
-        }
+}
 
-        std::cout << "Enter the score of player " << in_turn->get_name()
-                  << " of turn " << turn << ": ";
-        int pts = 0;
-        std::cin >> pts;
+string Player::get_name() {
 
-        in_turn->add_points(pts);
-        if (in_turn->has_won())
-        {
-            std::cout << "Game over! The winner is " << in_turn->get_name() << "!" << std::endl;
-            return EXIT_SUCCESS;
-        }
+    return name_;
+}
 
-        std::cout << std::endl;
-        std::cout << "Scoreboard after turn " << turn << ":" << std::endl;
-        std::cout << player1.get_name() << ": " << player1.get_points() << "p" << std::endl;
-        std::cout << player2.get_name() << ": " << player2.get_points() << "p" << std::endl;
-        std::cout << std::endl;
+void Player::add_points(int pts) {
 
-        turn += 1;
+    if (points_ + pts > 50) {
+        cout << get_name() << " gets penalty points!" << endl;
+        points_ = 25;
+    } else {
+        points_ += pts;
     }
+}
 
-    return EXIT_SUCCESS;
+bool Player::has_won() {
+
+    if (points_ == 50) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+int Player::get_points() {
+
+    return points_;
 }

@@ -33,6 +33,7 @@
 #include <ctime>
 #include <cctype>
 #include <limits>
+#include <random>
 
 enum Color {RED, GREEN, BLUE, YELLOW, WHITE, NUMBER_OF_COLORS};
 const char* ColorChar = "RGBYW";
@@ -46,7 +47,7 @@ Color charToColor(char c) {
             return static_cast<Color>(i);
         }
     }
-    throw std::invalid_argument("Unknown color");
+    throw std::invalid_argument("Unknown color.");
 }
 
 void printCarpet() {
@@ -59,18 +60,19 @@ void printCarpet() {
 }
 
 void fillCarpetRandom(int width, int height, int seed) {
-    srand(seed);
+    std::default_random_engine rand_gen(seed);
+    std::uniform_int_distribution<int> distribution(0, NUMBER_OF_COLORS-1);
     carpet.resize(height, std::vector<Color>(width));
     for (auto& row : carpet) {
         for (auto& c : row) {
-            c = static_cast<Color>(rand() % NUMBER_OF_COLORS);
+            c = static_cast<Color>(distribution(rand_gen));
         }
     }
 }
 
 void fillCarpetInput(int width, int height, const std::string& input) {
-    if (input.size() != width * height) {
-        throw std::invalid_argument("Wrong amount of colors");
+    if (static_cast<int>(input.size()) != width * height) {
+        throw std::invalid_argument("Wrong amount of colors.");
     }
     carpet.resize(height, std::vector<Color>(width));
     int i = 0;
@@ -83,8 +85,8 @@ void fillCarpetInput(int width, int height, const std::string& input) {
 
 int findPattern() {
     int matches = 0;
-    for (int i = 0; i < carpet.size() - 1; i++) {
-        for (int j = 0; j < carpet[i].size() - 1; j++) {
+    for (std::size_t i = 0; i < carpet.size() - 1; i++) {
+        for (std::size_t j = 0; j < carpet[i].size() - 1; j++) {
             if (carpet[i][j] == pattern[0] && carpet[i][j + 1] == pattern[1] &&
                 carpet[i + 1][j] == pattern[2] && carpet[i + 1][j + 1] == pattern[3]) {
                 std::cout << " - Found at (" << j + 1 << ", " << i + 1 << ")\n";
@@ -103,7 +105,7 @@ int main() {
     std::cout << "Enter carpet's width and height: ";
     std::cin >> width >> height;
     if (width < 2 || height < 2) {
-        std::cout << "Error: Carpet cannot be smaller than pattern.\n";
+        std::cout << " Error: Carpet cannot be smaller than pattern.\n";
         return EXIT_FAILURE;
     }
 
@@ -116,12 +118,16 @@ int main() {
         start = toupper(start);
         if (start == 'R') {
             while (true) {
-                std::cout << "Enter a seed value: ";
-                if (std::cin >> seed) {
+                std::cout << "Enter seed value: ";
+                if (std::cin >> seed && seed >= 1 && seed <= 20){
                     fillCarpetRandom(width, height, seed);
                     break;
+                } else if(std::cin.fail()) {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    std::cout << " Error: You must enter a valid integer.\n";
                 } else {
-                    std::cout << "Error: Wrong seed value.\n";
+                    std::cout << " Error: Wrong seed value.\n";
                     std::cin.clear();
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 }
@@ -135,7 +141,7 @@ int main() {
                 fillCarpetInput(width, height, input);
                 break;
             } catch (std::exception& e) {
-                std::cout << "Error: " << e.what() << '\n';
+                std::cout << " Error: " << e.what() << '\n';
             }
         }
     }
@@ -148,7 +154,7 @@ int main() {
         if (toupper(input[0]) == 'Q') {
             return EXIT_SUCCESS;
         } else if (input.size() != 4) {
-            std::cout << "Error: Wrong amount of colors.\n";
+            std::cout << " Error: Wrong amount of colors.\n";
         } else {
             try {
                 pattern.clear();
@@ -158,8 +164,10 @@ int main() {
                 int matches = findPattern();
                 std::cout << " = Matches found: " << matches << '\n';
             } catch (std::exception& e) {
-                std::cout << "Error: " << e.what() << '\n';
+                std::cout << " Error: " << e.what() << '\n';
             }
         }
     }
 }
+
+

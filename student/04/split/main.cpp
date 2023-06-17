@@ -2,10 +2,31 @@
 #include <string>
 #include <vector>
 
+std::vector<std::string> split(std::string str, char splitter, bool ignore_empty_parts = false) {
+    std::vector<std::string> parts;
+    std::string string;
 
-// TODO: Implement split function here
-// Do not change main function
+    for (unsigned long i = 0; i < str.size(); ++i) {
+        if (str.at(i) == splitter) {
+            parts.push_back(string);
+            string.clear();
+        } else {
+            string.push_back(str.at(i));
+        }
+    }
+    parts.push_back(string);
 
+    if (ignore_empty_parts) {
+        std::vector<std::string> parts_no_empty;
+        for (std::string sample : parts) {
+            if (!sample.empty()) {
+                parts_no_empty.push_back(sample);
+            }
+        }
+        return parts_no_empty;
+    }
+    return parts;
+}
 
 int main()
 {

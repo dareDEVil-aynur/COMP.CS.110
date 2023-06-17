@@ -36,6 +36,7 @@ enum Color {RED, GREEN, BLUE, YELLOW, WHITE, NUMBER_OF_COLORS};
 const char* ColorChar = "RGBYW";
 
 std::vector<std::vector<Color>> carpet;
+using Location = std::pair<int, int>;
 
 Color charToColor(char c) {
     for (int i = 0; i < NUMBER_OF_COLORS; i++) {
@@ -78,6 +79,41 @@ void printCarpet() {
     }
 }
 
+std::vector<Location> searchPattern(const std::string& pattern) {
+    int patWidth = 2, patHeight = 2;
+    std::vector<std::vector<Color>> pat(patHeight, std::vector<Color>(patWidth));
+
+    if (pattern.size() != patWidth * patHeight) {
+        throw std::invalid_argument("Wrong pattern size");
+    }
+
+    int i = 0;
+    for (auto& row : pat) {
+        for (auto& c : row) {
+            c = charToColor(pattern[i++]);
+        }
+    }
+
+    std::vector<Location> locations;
+    for (int y = 0; y <= carpet.size() - patHeight; y++) {
+        for (int x = 0; x <= carpet[0].size() - patWidth; x++) {
+            bool match = true;
+            for (int py = 0; match && py < patHeight; py++) {
+                for (int px = 0; px < patWidth; px++) {
+                    if (carpet[y + py][x + px] != pat[py][px]) {
+                        match = false;
+                        break;
+                    }
+                }
+            }
+            if (match) {
+                locations.emplace_back(x, y);
+            }
+        }
+    }
+    return locations;
+}
+
 int main() {
     int width, height, seed;
     char start;
@@ -118,4 +154,12 @@ int main() {
         }
     }
     printCarpet();
+    std::string pattern;
+    std::cout << "Enter the pattern to be searched: ";
+    std::cin >> pattern;
+    auto locations = searchPattern(pattern);
+    std::cout << "Pattern found " << locations.size() << " times at the following locations: ";
+    for (const auto& loc : locations) {
+        std::cout << "(" << loc.first << ", " << loc.second << ")\n";
+    }
 }

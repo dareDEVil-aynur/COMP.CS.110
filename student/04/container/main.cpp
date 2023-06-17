@@ -2,9 +2,7 @@
 #include <iostream>
 #include <vector>
 
-
 void read_integers(std::vector< int >& ints, int count) {
-
     int new_integer = 0;
     for(int i = 0; i < count; ++i) {
         std::cin >> new_integer;
@@ -12,9 +10,7 @@ void read_integers(std::vector< int >& ints, int count) {
     }
 }
 
-
-bool same_values(const std::vector< int > ints) {
-
+bool same_values(const std::vector< int >& ints) {
     for(unsigned long i = 0; i < ints.size() - 1; ++i) {
         if (ints.at(i) != ints.at(i+1) ) {
             return false;
@@ -23,47 +19,43 @@ bool same_values(const std::vector< int > ints) {
     return true;
 }
 
-
-bool is_ordered_non_strict_ascending(const std::vector< int > ints) {
-
+bool is_ordered_non_strict_ascending(const std::vector< int >& ints) {
     for(unsigned long i = 0; i < ints.size() - 1; ++i) {
         if (ints.at(i) > ints.at(i+1)) {
-                return false;
-        }
-    }
-    return true;
-}
-
-
-bool is_arithmetic_series(const std::vector< int > ints) {
-
-    for(unsigned long i = 0; i < ints.size() - 3; ++i) {
-        if (ints.at(i)-ints.at(i+1) != ints.at(i+2)-ints.at(i+3)) {
             return false;
         }
     }
     return true;
 }
 
-
-bool is_geometric_series(const std::vector< int > ints) {
-
-    for(unsigned long i = 0; i < ints.size() - 3; ++i) {
-        if (ints.at(i) != 0 and ints.at(i+1) != 0 and ints.at(i+2) != 0 and ints.at(i+3) != 0) {
-            float num1 = ints.at(i);
-            float num2 = ints.at(i+1);
-            float num3 = ints.at(i+2);
-            float num4 = ints.at(i+3);
-            if (num1/num2 != num3/num4) {
-                return false;
-            }
-        } else {
+bool is_arithmetic_series(const std::vector< int >& ints) {
+    if(ints.size() < 2) return true;
+    int diff = ints.at(1) - ints.at(0);
+    for(unsigned long i = 1; i < ints.size() - 1; ++i) {
+        if (ints.at(i+1) - ints.at(i) != diff) {
             return false;
         }
     }
     return true;
 }
 
+bool is_geometric_series(const std::vector< int >& ints) {
+    if(ints.size() < 2) return true;
+    if(ints.at(0) == 0) return false;
+    float ratio = static_cast<float>(ints.at(1)) / ints.at(0);
+    for(unsigned long i = 1; i < ints.size() - 1; ++i) {
+        if(ints.at(i) == 0 || static_cast<float>(ints.at(i+1)) / ints.at(i) != ratio) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void triple_integers(std::vector< int >& ints) {
+    for(auto& num : ints) {
+        num *= 3;
+    }
+}
 
 int main()
 {
@@ -94,6 +86,12 @@ int main()
         std::cout << "The integers form a geometric series" << std::endl;
     else
         std::cout << "The integers do not form a geometric series" << std::endl;
+    triple_integers(integers);
+    std::cout << "Tripled values: ";
+    for(const auto& num : integers) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
 
     return EXIT_SUCCESS;
 }

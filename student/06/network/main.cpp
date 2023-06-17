@@ -2,6 +2,9 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
+#include <algorithm>
+#include <cassert>
 
 const std::string HELP_TEXT = "S = store id1 i2\nP = print id\n"
                               "C = count id\nD = depth id\n";
@@ -30,10 +33,33 @@ std::vector<std::string> split(const std::string& s,
     return result;
 }
 
+void printNames(const std::map<std::string, std::vector<std::string>>& names, const std::string& id, unsigned depth = 0) {
+    std::cout << std::string(depth * 2, '.') << id << std::endl;
+    for (const auto& underling : names.at(id)) {
+        printNames(names, underling, depth + 1);
+    }
+}
+
+unsigned depth(const std::map<std::string, std::vector<std::string>>& names, const std::string& id) {
+    unsigned deepestPoint = 0;
+    for ( const auto& under : names.at(id)) {
+        deepestPoint = std::max(deepestPoint, depth(names, under));
+    }
+    return 1 + deepestPoint;
+}
+
+unsigned count(const std::map<std::string, std::vector<std::string>>& names, const std::string& id) {
+    const auto& under = names.at(id);
+    unsigned underlings_count = under.size();
+    for (const auto& underling : under) {
+        underlings_count += count(names, underling);
+    }
+    return underlings_count;
+}
+
 int main()
 {
-    // TODO: Implement the datastructure here
-
+    std::map<std::string, std::vector<std::string>> names;
 
     while(true)
     {
@@ -60,7 +86,12 @@ int main()
             std::string id1 = parts.at(1);
             std::string id2 = parts.at(2);
 
-            // TODO: Implement the command here!
+            if (names.find(id1) == names.end()) {
+                names[id1] = {};
+            }
+            names.at(id1).push_back(id2);
+            assert(names.count(id2) == 0);
+            names[id2] = {};
 
         }
         else if(command == "P" or command == "p")
@@ -72,8 +103,8 @@ int main()
             }
             std::string id = parts.at(1);
 
-            // TODO: Implement the command here!
-
+            std::map<std::string, std::vector<std::string>>::iterator i;
+            printNames(names, id);
         }
         else if(command == "C" or command == "c")
         {
@@ -83,9 +114,7 @@ int main()
                 continue;
             }
             std::string id = parts.at(1);
-
-            // TODO: Implement the command here!
-
+            std::cout << count(names, id) << std::endl;
         }
         else if(command == "D" or command == "d")
         {
@@ -95,9 +124,7 @@ int main()
                 continue;
             }
             std::string id = parts.at(1);
-
-            // TODO: Implement the command here!
-
+            std::cout << depth(names, id) << std::endl;
         }
         else if(command == "Q" or command == "q")
         {

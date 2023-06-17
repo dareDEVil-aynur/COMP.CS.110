@@ -69,6 +69,15 @@ void fillCarpetInput(int width, int height, const std::string& input) {
     }
 }
 
+void printCarpet() {
+    for (const auto& row : carpet) {
+        for (const auto& c : row) {
+            std::cout << ColorChar[c];
+        }
+        std::cout << '\n';
+    }
+}
+
 int main() {
     int width, height, seed;
     char start;
@@ -108,4 +117,5 @@ int main() {
             }
         }
     }
+    printCarpet();
 }

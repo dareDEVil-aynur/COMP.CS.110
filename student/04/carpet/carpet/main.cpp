@@ -31,6 +31,7 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <limits>
 
 enum Color {RED, GREEN, BLUE, YELLOW, WHITE, NUMBER_OF_COLORS};
 const char* ColorChar = "RGBYW";
@@ -133,11 +134,14 @@ int main() {
             while (true) {
                 std::cout << "Enter a seed value: ";
                 std::cin >> seed;
-                if (seed >= 1 && seed <= 20) {
-                    fillCarpetRandom(width, height, seed);
-                    break;
+                if (std::cin.fail() || seed <= 0) {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    std::cout << "Invalid input. Please enter a positive integer.\n";
+                    continue;
                 }
-                std::cout << "Error: Wrong seed value.\n";
+                fillCarpetRandom(width, height, seed);
+                break;
             }
             break;
         }

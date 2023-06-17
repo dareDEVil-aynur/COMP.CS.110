@@ -31,13 +31,14 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <cctype>
 #include <limits>
 
 enum Color {RED, GREEN, BLUE, YELLOW, WHITE, NUMBER_OF_COLORS};
 const char* ColorChar = "RGBYW";
 
 std::vector<std::vector<Color>> carpet;
-using Location = std::pair<int, int>;
+std::vector<Color> pattern;
 
 Color charToColor(char c) {
     for (int i = 0; i < NUMBER_OF_COLORS; i++) {
@@ -46,6 +47,15 @@ Color charToColor(char c) {
         }
     }
     throw std::invalid_argument("Unknown color");
+}
+
+void printCarpet() {
+    for (auto row : carpet) {
+        for (auto c : row) {
+            std::cout << ' ' << ColorChar[c];
+        }
+        std::cout << '\n';
+    }
 }
 
 void fillCarpetRandom(int width, int height, int seed) {
@@ -71,48 +81,18 @@ void fillCarpetInput(int width, int height, const std::string& input) {
     }
 }
 
-void printCarpet() {
-    for (const auto& row : carpet) {
-        for (const auto& c : row) {
-            std::cout << ColorChar[c];
-        }
-        std::cout << '\n';
-    }
-}
-
-std::vector<Location> searchPattern(const std::string& pattern) {
-    int patWidth = 2, patHeight = 2;
-    std::vector<std::vector<Color>> pat(patHeight, std::vector<Color>(patWidth));
-
-    if (pattern.size() != patWidth * patHeight) {
-        throw std::invalid_argument("Wrong pattern size");
-    }
-
-    int i = 0;
-    for (auto& row : pat) {
-        for (auto& c : row) {
-            c = charToColor(pattern[i++]);
-        }
-    }
-
-    std::vector<Location> locations;
-    for (int y = 0; y <= carpet.size() - patHeight; y++) {
-        for (int x = 0; x <= carpet[0].size() - patWidth; x++) {
-            bool match = true;
-            for (int py = 0; match && py < patHeight; py++) {
-                for (int px = 0; px < patWidth; px++) {
-                    if (carpet[y + py][x + px] != pat[py][px]) {
-                        match = false;
-                        break;
-                    }
-                }
-            }
-            if (match) {
-                locations.emplace_back(x, y);
+int findPattern() {
+    int matches = 0;
+    for (int i = 0; i < carpet.size() - 1; i++) {
+        for (int j = 0; j < carpet[i].size() - 1; j++) {
+            if (carpet[i][j] == pattern[0] && carpet[i][j + 1] == pattern[1] &&
+                carpet[i + 1][j] == pattern[2] && carpet[i + 1][j + 1] == pattern[3]) {
+                std::cout << " - Found at (" << j + 1 << ", " << i + 1 << ")\n";
+                matches++;
             }
         }
     }
-    return locations;
+    return matches;
 }
 
 int main() {
@@ -127,43 +107,59 @@ int main() {
         return EXIT_FAILURE;
     }
 
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
     while (true) {
         std::cout << "Select start (R for random, I for input): ";
         std::cin >> start;
-        if (toupper(start) == 'R') {
+        start = toupper(start);
+        if (start == 'R') {
             while (true) {
                 std::cout << "Enter a seed value: ";
-                std::cin >> seed;
-                if (std::cin.fail() || seed <= 0) {
+                if (std::cin >> seed) {
+                    fillCarpetRandom(width, height, seed);
+                    break;
+                } else {
+                    std::cout << "Error: Wrong seed value.\n";
                     std::cin.clear();
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    std::cout << "Invalid input. Please enter a positive integer.\n";
-                    continue;
                 }
-                fillCarpetRandom(width, height, seed);
-                break;
             }
             break;
-        }
-        else if (toupper(start) == 'I') {
+        } else if (start == 'I') {
+            std::cin.ignore();
             std::cout << "Input: ";
-            std::cin >> input;
+            getline(std::cin, input);
             try {
                 fillCarpetInput(width, height, input);
                 break;
-            }
-            catch (std::exception& e) {
-                std::cout << " Error: " << e.what() << '\n';
+            } catch (std::exception& e) {
+                std::cout << "Error: " << e.what() << '\n';
             }
         }
     }
+
     printCarpet();
-    std::string pattern;
-    std::cout << "Enter the pattern to be searched: ";
-    std::cin >> pattern;
-    auto locations = searchPattern(pattern);
-    std::cout << "Pattern found " << locations.size() << " times at the following locations: ";
-    for (const auto& loc : locations) {
-        std::cout << "(" << loc.first << ", " << loc.second << ")\n";
+
+    while (true) {
+        std::cout << "Enter 4 colors, or q to quit: ";
+        std::cin >> input;
+        if (toupper(input[0]) == 'Q') {
+            return EXIT_SUCCESS;
+        } else if (input.size() != 4) {
+            std::cout << "Error: Wrong amount of colors.\n";
+        } else {
+            try {
+                pattern.clear();
+                for (char c : input) {
+                    pattern.push_back(charToColor(c));
+                }
+                int matches = findPattern();
+                std::cout << " = Matches found: " << matches << '\n';
+            } catch (std::exception& e) {
+                std::cout << "Error: " << e.what() << '\n';
+            }
+        }
     }
 }

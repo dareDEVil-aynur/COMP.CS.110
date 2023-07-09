@@ -33,15 +33,14 @@
 #include <map>
 #include <sstream>
 
-using namespace std;
-
-bool readInput(std::map<std::string, std::vector<Book>>& books){
+bool readInput(std::map<std::string, Library>& libraries){
     std::string input_file = "";
 
     std::cout << "Input file: ";
-    getline(cin, input_file);
+    getline(std::cin, input_file);
 
-    ifstream file_object(input_file);
+    std::ifstream file_object(input_file);
+    //File must be able to open, otherwise quit with EXIT_FAILURE
     if( not file_object ){
         std::cout << "Error: input file cannot be opened" << std::endl;
         return false;
@@ -49,32 +48,42 @@ bool readInput(std::map<std::string, std::vector<Book>>& books){
         std::string line = "";
         while(getline(file_object, line)){
             std::istringstream ss(line);
-            string library = "";
-            string author = "";
-            string title = "";
-            string status = "";
+            std::string library_name = "";
+            std::string author = "";
+            std::string title = "";
+            std::string status = "";
             int reservations = 0;
 
-            getline(ss, library, ';');
+            getline(ss, library_name, ';');
             getline(ss, author, ';');
             getline(ss, title, ';');
             getline(ss, status, ';');
 
-            if (library.empty() or title.empty() or author.empty() or status.empty()){
+            //Any empty field in the input data results in EXIT_FAILURE
+            if (library_name.empty() or title.empty() or author.empty() or status.empty()){
                 std::cout << "Error: empty field" << std::endl;
                 return false;
             }
 
             if (status != "on-the-shelf"){
-                reservations = stoi(status);
+                reservations = std::stoi(status);
             }
+
             Book book;
             book.author = author;
             book.title = title;
             book.reservations = reservations;
-            books[library].push_back(book);
+
+            // check if library already exists, if not, create a new one
+            if(libraries.find(library_name) == libraries.end()){
+                Library newLibrary(library_name);
+                libraries[library_name] = newLibrary;
+            }
+
+            libraries[library_name].addBook(book);
         }
         file_object.close();
         return true;
     }
 }
+

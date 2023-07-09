@@ -28,16 +28,17 @@
 
 #include <iostream>
 #include <string>
-#include <sstream>
 #include "library.hh"
 
 int main() {
-    std::map<std::string, std::vector<Book>> books;
-    std::string input_file = "";
+    std::map<std::string, Library> libraries;
 
-    if(!readInput(books)){
+    if(!readInput(libraries)){
         return EXIT_FAILURE;
     }
+
+    // Further code will be implemented in future commits
+
     return EXIT_SUCCESS;
 }
 

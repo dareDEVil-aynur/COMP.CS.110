@@ -36,5 +36,17 @@ struct Book {
     int reservations;
 };
 
-bool readInput(std::map<std::string, std::vector<Book>>& books);
+class Library {
+public:
+    Library(std::string name) : library_name(name) {};
+    void addBook(Book book) { books.push_back(book); }
+    const std::vector<Book>& getBooks() const { return books; }
+    std::string getLibraryName() const { return library_name; }
+
+private:
+    std::string library_name;
+    std::vector<Book> books;
+};
+
+bool readInput(std::map<std::string, Library>& libraries);
 

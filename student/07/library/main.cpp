@@ -54,6 +54,17 @@ int main() {
 
     printLibraries(libraries);
 
+    std::cout << "Enter the library name to remove: ";
+    std::getline(std::cin, library_name);
+    removeLibrary(libraries, library_name);
+
+    std::string book_title;
+    std::cout << "Enter a book title to remove: ";
+    std::getline(std::cin, book_title);
+    removeBook(libraries, library_name, book_title);
+
+    printLibraries(libraries);
+
     return EXIT_SUCCESS;
 }
 

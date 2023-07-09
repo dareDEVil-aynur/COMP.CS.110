@@ -108,3 +108,20 @@ void addLibrary(std::map<std::string, Library>& libraries, std::string library_n
 void addBook(std::map<std::string, Library>& libraries, std::string library_name, Book book) {
     libraries[library_name].addBook(book);
 }
+
+bool removeLibrary(std::map<std::string, Library>& libraries, std::string library_name) {
+    auto it = libraries.find(library_name);
+    if(it != libraries.end()) {
+        libraries.erase(it);
+        return true;
+    }
+    return false;
+}
+
+bool removeBook(std::map<std::string, Library>& libraries, std::string library_name, std::string book_title) {
+    auto it = libraries.find(library_name);
+    if(it != libraries.end()) {
+        return it->second.removeBook(book_title);
+    }
+    return false;
+}

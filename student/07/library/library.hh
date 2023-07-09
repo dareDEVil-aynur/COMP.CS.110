@@ -26,34 +26,29 @@
 * E-Mail: aynurrahman.talukdar@tuni.fi
 */
 
+#ifndef LIBRARY_HH
+#define LIBRARY_HH
+
 #include <map>
-#include <vector>
 #include <string>
+#include <vector>
 
 struct Book {
-    std::string author;
     std::string title;
+    std::string author;
     int reservations;
 };
 
 class Library {
-public:
-    Library(std::string name) : library_name(name) {};
-    void addBook(Book book) { books.push_back(book); }
-    bool removeBook(std::string title);
-    bool reserveBook(std::string title);
-    const std::vector<Book>& getBooks() const { return books; }
-    std::string getLibraryName() const { return library_name; }
-
-private:
-    std::string library_name;
-    std::vector<Book> books;
+    public:
+        void addBook(const std::string& library, const Book& book);
+        void material(const std::string& library) const;
+        void printBooks(const std::string& library, const std::string& author) const;
+        void reservable(const std::string& author, const std::string& book_title) const;
+        void loanable() const;
+        std::vector<std::string> getLibraries() const;
+    private:
+        std::map<std::string, std::vector<Book>> libraries;
 };
 
-bool readInput(std::map<std::string, Library>& libraries);
-void printLibraries(const std::map<std::string, Library>& libraries);
-void addLibrary(std::map<std::string, Library>& libraries, std::string library_name);
-bool removeLibrary(std::map<std::string, Library>& libraries, std::string library_name);
-void addBook(std::map<std::string, Library>& libraries, std::string library_name, Book book);
-bool removeBook(std::map<std::string, Library>& libraries, std::string library_name, std::string book_title);
-bool reserveBook(std::map<std::string, Library>& libraries, std::string library_name, std::string book_title);
+#endif //LIBRARY_HH

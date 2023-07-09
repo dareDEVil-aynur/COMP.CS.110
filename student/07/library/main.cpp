@@ -26,60 +26,98 @@
 * E-Mail: aynurrahman.talukdar@tuni.fi
 */
 
-#include <iostream>
-#include <string>
 #include "library.hh"
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <algorithm>
+
+bool readInput(Library& library) {
+    std::string input_file = "";
+
+    std::cout << "Input file: ";
+    getline(std::cin, input_file);
+
+    std::ifstream file_object(input_file);
+    if (!file_object) {
+        std::cout << "Error: input file cannot be opened" << std::endl;
+        return false;
+    } else {
+        std::string line = "";
+        while (getline(file_object, line)) {
+            std::istringstream ss(line);
+            std::string libraryName = "";
+            std::string author = "";
+            std::string title = "";
+            std::string status = "";
+            int reservations = 0;
+
+            getline(ss, libraryName, ';');
+            getline(ss, author, ';');
+            getline(ss, title, ';');
+            getline(ss, status, ';');
+
+            if (libraryName.empty() or title.empty() or author.empty() or status.empty()) {
+                std::cout << "Error: empty field" << std::endl;
+                return false;
+            }
+
+            if (status != "on-the-shelf") {
+                reservations = std::stoi(status);
+            }
+            Book book;
+            book.author = author;
+            book.title = title;
+            book.reservations = reservations;
+            library.addBook(libraryName, book);
+        }
+        file_object.close();
+        return true;
+    }
+}
 
 int main() {
-    std::map<std::string, Library> libraries;
+    Library library;
 
-    if(!readInput(libraries)){
+    if(!readInput(library)) {
         return EXIT_FAILURE;
     }
 
-    printLibraries(libraries);
+    std::string input = "";
+    while(input != "quit") {
+        std::cout << "lib> ";
+        getline(std::cin, input);
 
-    std::string library_name;
-    std::cout << "Enter a new library name: ";
-    std::getline(std::cin, library_name);
-    addLibrary(libraries, library_name);
+        std::istringstream ss(input);
+        std::string command = input.substr(0, input.find(" "));
+        std::string buffer = "";
+        std::string target_library = "";
+        std::string target_author = "";
+        std::string target_title = "";
 
-    Book book;
-    std::cout << "Enter a book title: ";
-    std::getline(std::cin, book.title);
-    std::cout << "Enter the book's author: ";
-    std::getline(std::cin, book.author);
-    book.reservations = 0;
-    addBook(libraries, library_name, book);
-
-    printLibraries(libraries);
-
-    std::cout << "Enter the library name to remove: ";
-    std::getline(std::cin, library_name);
-    if (!removeLibrary(libraries, library_name)){
-        std::cout << "Failed to remove the library: " << library_name << std::endl;
+        if (command == "libraries") {
+            for (auto& element : library.getLibraries()) {
+                std::cout << element << std::endl;
+            }
+        } else if (command == "material") {
+            target_library = input.substr(input.find(" ") + 1);
+            library.material(target_library);
+        } else if (command == "books") {
+            getline(ss, buffer, ' ');
+            getline(ss, target_library, ' ');
+            getline(ss, target_author, '\n');
+            library.printBooks(target_library, target_author);
+        } else if (command == "reservable") {
+            getline(ss, buffer, ' ');
+            getline(ss, target_author, ' ');
+            getline(ss, target_title, '\n');
+            target_title.erase(std::remove(target_title.begin(), target_title.end(), '\"'), target_title.end());
+            library.reservable(target_author, target_title);
+        } else if (command == "loanable") {
+            library.loanable();
+        } else if (command != "quit") {
+            std::cout << "Error: unknown command" << std::endl;
+        }
     }
-
-    std::string book_title;
-    std::cout << "Enter a book title to remove: ";
-    std::getline(std::cin, book_title);
-    if (!removeBook(libraries, library_name, book_title)){
-        std::cout << "Failed to remove the book: " << book_title << " from the library: " << library_name << std::endl;
-    }
-
-    printLibraries(libraries);
-
-    std::cout << "Enter a book title to reserve: ";
-    std::getline(std::cin, book_title);
-    if (!reserveBook(libraries, library_name, book_title)){
-        std::cout << "Failed to reserve the book: " << book_title << " from the library: " << library_name << std::endl;
-    }
-
-    printLibraries(libraries);
-
     return EXIT_SUCCESS;
 }
-
-
-
-

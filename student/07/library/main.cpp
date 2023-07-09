@@ -39,7 +39,23 @@ int main() {
 
     printLibraries(libraries);
 
+    std::string library_name;
+    std::cout << "Enter a new library name: ";
+    std::getline(std::cin, library_name);
+    addLibrary(libraries, library_name);
+
+    Book book;
+    std::cout << "Enter a book title: ";
+    std::getline(std::cin, book.title);
+    std::cout << "Enter the book's author: ";
+    std::getline(std::cin, book.author);
+    book.reservations = 0;
+    addBook(libraries, library_name, book);
+
+    printLibraries(libraries);
+
     return EXIT_SUCCESS;
 }
+
 
 

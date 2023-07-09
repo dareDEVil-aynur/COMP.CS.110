@@ -50,4 +50,6 @@ private:
 
 bool readInput(std::map<std::string, Library>& libraries);
 void printLibraries(const std::map<std::string, Library>& libraries);
+void addLibrary(std::map<std::string, Library>& libraries, std::string library_name);
+void addBook(std::map<std::string, Library>& libraries, std::string library_name, Book book);
 

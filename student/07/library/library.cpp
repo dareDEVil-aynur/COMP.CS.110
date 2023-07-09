@@ -100,3 +100,11 @@ void printLibraries(const std::map<std::string, Library>& libraries) {
         }
     }
 }
+
+void addLibrary(std::map<std::string, Library>& libraries, std::string library_name) {
+    libraries[library_name] = Library(library_name);
+}
+
+void addBook(std::map<std::string, Library>& libraries, std::string library_name, Book book) {
+    libraries[library_name].addBook(book);
+}

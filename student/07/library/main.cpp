@@ -56,23 +56,30 @@ int main() {
 
     std::cout << "Enter the library name to remove: ";
     std::getline(std::cin, library_name);
-    removeLibrary(libraries, library_name);
+    if (!removeLibrary(libraries, library_name)){
+        std::cout << "Failed to remove the library: " << library_name << std::endl;
+    }
 
     std::string book_title;
     std::cout << "Enter a book title to remove: ";
     std::getline(std::cin, book_title);
-    removeBook(libraries, library_name, book_title);
+    if (!removeBook(libraries, library_name, book_title)){
+        std::cout << "Failed to remove the book: " << book_title << " from the library: " << library_name << std::endl;
+    }
 
     printLibraries(libraries);
 
     std::cout << "Enter a book title to reserve: ";
     std::getline(std::cin, book_title);
-    reserveBook(libraries, library_name, book_title);
+    if (!reserveBook(libraries, library_name, book_title)){
+        std::cout << "Failed to reserve the book: " << book_title << " from the library: " << library_name << std::endl;
+    }
 
     printLibraries(libraries);
 
     return EXIT_SUCCESS;
 }
+
 
 
 

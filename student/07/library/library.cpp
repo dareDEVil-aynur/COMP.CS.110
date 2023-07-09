@@ -33,6 +33,26 @@
 #include <map>
 #include <sstream>
 
+bool Library::removeBook(std::string title) {
+    for (auto it = books.begin(); it != books.end(); ++it) {
+        if (it->title == title) {
+            books.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Library::reserveBook(std::string title) {
+    for (auto& book : books) {
+        if (book.title == title) {
+            book.reservations++;
+            return true;
+        }
+    }
+    return false;
+}
+
 bool readInput(std::map<std::string, Library>& libraries){
     std::string input_file = "";
 

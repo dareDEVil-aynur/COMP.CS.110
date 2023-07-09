@@ -125,3 +125,11 @@ bool removeBook(std::map<std::string, Library>& libraries, std::string library_n
     }
     return false;
 }
+
+bool reserveBook(std::map<std::string, Library>& libraries, std::string library_name, std::string book_title) {
+    auto it = libraries.find(library_name);
+    if(it != libraries.end()) {
+        return it->second.reserveBook(book_title);
+    }
+    return false;
+}

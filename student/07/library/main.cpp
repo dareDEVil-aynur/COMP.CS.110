@@ -65,6 +65,12 @@ int main() {
 
     printLibraries(libraries);
 
+    std::cout << "Enter a book title to reserve: ";
+    std::getline(std::cin, book_title);
+    reserveBook(libraries, library_name, book_title);
+
+    printLibraries(libraries);
+
     return EXIT_SUCCESS;
 }
 

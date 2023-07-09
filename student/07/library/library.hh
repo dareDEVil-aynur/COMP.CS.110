@@ -41,6 +41,7 @@ public:
     Library(std::string name) : library_name(name) {};
     void addBook(Book book) { books.push_back(book); }
     bool removeBook(std::string title);
+    bool reserveBook(std::string title);
     const std::vector<Book>& getBooks() const { return books; }
     std::string getLibraryName() const { return library_name; }
 
@@ -55,5 +56,4 @@ void addLibrary(std::map<std::string, Library>& libraries, std::string library_n
 bool removeLibrary(std::map<std::string, Library>& libraries, std::string library_name);
 void addBook(std::map<std::string, Library>& libraries, std::string library_name, Book book);
 bool removeBook(std::map<std::string, Library>& libraries, std::string library_name, std::string book_title);
-
-
+bool reserveBook(std::map<std::string, Library>& libraries, std::string library_name, std::string book_title);

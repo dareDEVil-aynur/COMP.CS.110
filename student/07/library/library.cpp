@@ -87,3 +87,16 @@ bool readInput(std::map<std::string, Library>& libraries){
     }
 }
 
+void printLibraries(const std::map<std::string, Library>& libraries) {
+    for(auto& pair : libraries) {
+        const Library& lib = pair.second;
+        std::cout << "Library " << lib.getLibraryName() << ":\n";
+        const std::vector<Book>& books = lib.getBooks();
+        for(const Book& book : books) {
+            std::cout << book.title << ", " << book.author;
+            if(book.reservations > 0)
+                std::cout << ", " << book.reservations << " reservations";
+            std::cout << "\n";
+        }
+    }
+}

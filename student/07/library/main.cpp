@@ -37,8 +37,9 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    // Further code will be implemented in future commits
+    printLibraries(libraries);
 
     return EXIT_SUCCESS;
 }
+
 

@@ -49,4 +49,5 @@ private:
 };
 
 bool readInput(std::map<std::string, Library>& libraries);
+void printLibraries(const std::map<std::string, Library>& libraries);
 

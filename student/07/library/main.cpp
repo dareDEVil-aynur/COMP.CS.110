@@ -103,10 +103,18 @@ int main() {
             target_library = input.substr(input.find(" ") + 1);
             library.material(target_library);
         } else if (command == "books") {
-            getline(ss, buffer, ' ');
-            getline(ss, target_library, ' ');
-            getline(ss, target_author, '\n');
-            library.printBooks(target_library, target_author);
+            std::vector<std::string> parameters;
+            while (getline(ss, buffer, ' ')) {
+                parameters.push_back(buffer);
+            }
+
+            if (parameters.size() != 3) {
+                std::cout << "Error: wrong number of parameters" << std::endl;
+            } else {
+                target_library = parameters[1];
+                target_author = parameters[2];
+                library.printBooks(target_library, target_author);
+            }
         } else if (command == "reservable") {
             getline(ss, buffer, ' ');
             getline(ss, target_author, ' ');
@@ -121,3 +129,4 @@ int main() {
     }
     return EXIT_SUCCESS;
 }
+

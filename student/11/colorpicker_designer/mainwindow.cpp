@@ -17,9 +17,23 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->horizontalSliderBlue->setMinimum(0);
     ui->horizontalSliderBlue->setMaximum(RGB_VALUE_MAX);
 
+    ui->spinBoxRed->setMinimum(0);
+    ui->spinBoxRed->setMaximum(RGB_VALUE_MAX);
+
+    ui->spinBoxBlue->setMinimum(0);
+    ui->spinBoxBlue->setMaximum(RGB_VALUE_MAX);
+
+    ui->spinBoxGreen->setMinimum(0);
+    ui->spinBoxGreen->setMaximum(RGB_VALUE_MAX);
+
     connect(ui->horizontalSliderRed, &QSlider::valueChanged, this, &MainWindow::onColorChanged);
     connect(ui->horizontalSliderGreen, &QSlider::valueChanged, this, &MainWindow::onColorChanged);
     connect(ui->horizontalSliderBlue, &QSlider::valueChanged, this, &MainWindow::onColorChanged);
+
+    connect(ui->spinBoxRed, &QSpinBox::valueChanged, ui->horizontalSliderRed, &QSlider::setValue);
+    connect(ui->spinBoxGreen, &QSpinBox::valueChanged, ui->horizontalSliderGreen, &QSlider::setValue);
+    connect(ui->spinBoxBlue, &QSpinBox::valueChanged, ui->horizontalSliderBlue, &QSlider::setValue);
+
 
     onColorChanged();
 }

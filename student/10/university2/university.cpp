@@ -8,7 +8,15 @@ University::University(const std::string& email_suffix):
 
 University::~University()
 {
+    for ( auto course : courses_ )
+    {
+        delete course.second;
+    }
 
+    for ( auto account : accounts_ )
+    {
+        delete account.second;
+    }
 }
 
 void University::new_course(Params params)

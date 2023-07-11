@@ -13,7 +13,9 @@ SOURCES += \
 
 HEADERS += \
     account.hh \
+    animal.hh \
     cli.hh \
     course.hh \
+    mammal.hh \
     university.hh \
     utils.hh

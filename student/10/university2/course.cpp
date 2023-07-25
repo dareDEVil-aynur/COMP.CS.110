@@ -51,6 +51,32 @@ void Course::add_staff(Account *new_staff_member)
     std::cout << STAFF_ADDED << std::endl;
 }
 
+void Course::add_student(Account *new_student)
+{
+    // Checking if account is already on the course
+    for ( unsigned int i = 0; i < new_student->get_completed_courses().size(); ++i )
+    {
+        if ( new_student->get_completed_courses().at(i)->get_code() == this->course_code_ )
+        {
+            std::cout << STUDENT_COMPLETED << std::endl;
+            return;
+        }
+    }
+    // Checking if account is already on the course
+    for ( unsigned int i = 0; i < course_students_.size(); ++i )
+    {
+        if ( course_students_.at(i) == new_student )
+        {
+            std::cout << STUDENT_EXISTS << std::endl;
+            return;
+        }
+    }
+
+    if (new_student->sign_course(this)){
+        course_students_.push_back(new_student);
+    }
+}
+
 const std::string Course::get_code() const
 {
     return course_code_;
@@ -60,7 +86,3 @@ int Course::get_credits() const
 {
     return credits_;
 }
-
-
-
-

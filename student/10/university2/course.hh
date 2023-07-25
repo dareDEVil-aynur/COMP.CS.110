@@ -6,7 +6,21 @@
  *
  * In the project, this class should be expanded to
  * include necessary methods and attributes.
+ *
+ * Overview:
+ *   The Course class is devised to include both staff and students into
+ * a course, to validate whether a student has already finished the course,
+ * and to display details concerning the course and its associated staff members.
+ *   Additionally, this class houses functions that fetch the course code and
+ * its corresponding credit value. The class employs dynamic memory allocation
+ * to maintain the roster of staff and students, which is handled via a vector container.
+ *
+ * Name: Aynur Rahman Talukdar
+ * Student number: 150189473
+ * UserID: qkayta
+ * E-Mail: aynurrahman.talukdar@tuni.fi
  * */
+
 #ifndef COURSE_HH
 #define COURSE_HH
 
@@ -14,7 +28,7 @@
 #include <string>
 #include <vector>
 
-//const std::string STUDENT_ADDED = "A new student has been added.";
+//const std::string STUDENT_ADDED = "Signed up on the course.";
 const std::string STAFF_ADDED = "A new staff member has been added.";
 const std::string STAFF_EXISTS = "Error: Staff member already added on this course.";
 const std::string STUDENT_EXISTS = "Error: Student already added on this course.";
@@ -65,6 +79,13 @@ public:
     void add_staff(Account* new_staff_member);
 
     /**
+     * @brief add student
+     * @param new_student
+     * Add a new student to course.
+     */
+    void add_student(Account* new_student);
+
+    /**
      * @brief get_code
      * @return the course code.
      */
@@ -76,16 +97,24 @@ public:
      */
     int get_credits() const;
 
+    /**
+     * @brief get_course_students
+     * @return vector with all signed in students
+     */
+    const std::vector<Account*>& get_course_students() const
+    {
+        return course_students_;
+    }
+
 private:
     std::string course_code_;
     std::string name_;
     int credits_;
     std::vector<Account*> course_staff_;
+    std::vector<Account*> course_students_;
 
     // Possibly (but not necessarily) you will need here an attibute
     // (e.g. vector) containing students signed up for the course
 };
 
 #endif // COURSE_HH
-
-

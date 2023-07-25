@@ -6,12 +6,35 @@
  *
  * In the project, this class should be expanded to
  * include necessary methods and attributes.
+ *
+ * Overview:
+ *   The Account class aims to encapsulate a university student's account.
+ * Its primary responsibility is to hold data such as the student's name,
+ * account number, email, the courses they've enrolled in or completed, and
+ * their graduation status. The class also furnishes functions that allow
+ * course enrollment and completion, offer information about the enrolled
+ * and completed courses, present the student's full name and email, verify
+ * the graduation status, and update the graduation status of the student.
+ * An important note is that the student's email address is constructed
+ * within this class using their name and university suffix.
+ *   Notably, the class performs a check to confirm whether the student
+ * has graduated before they can enroll in a new course. The information
+ * regarding enrolled and completed courses is kept in a vector, with
+ * provided methods for accessing it. The Course class is employed as an
+ * argument in the course enrollment and completion functions.
+ *
+ * Name: Aynur Rahman Talukdar
+ * Student number: 150189473
+ * UserID: qkayta
+ * E-Mail: aynurrahman.talukdar@tuni.fi
+ *
  * */
 #ifndef ACCOUNT_HH
 #define ACCOUNT_HH
 
 #include <string>
-//#include <vector>
+#include <vector>
+#include <memory>
 
 class Course;
 
@@ -61,6 +84,42 @@ public:
      */
     int get_account_number() const;
 
+    /**
+     * @brief sign_course
+     * @return successful signing or not
+     */
+    bool sign_course(Course* course);
+
+    /**
+     * @brief complete_course
+     * @return successful completion or not
+     */
+    bool complete_course(Course* course);
+
+    /**
+     * @brief get_completed_courses
+     * @return vector with all completed courses
+     */
+    std::vector<std::shared_ptr<Course>> get_completed_courses() const;
+
+    /**
+     * @brief get_signed_courses
+     * @return vector with all signed courses
+     */
+    std::vector<std::shared_ptr<Course>> get_signed_courses() const;
+
+    /**
+     * @brief Graduates the account by changing courses from signed to completed
+     */
+    void graduate();
+
+    /**
+     * @brief get_graduation_status
+     * @return true if already graduated
+     */
+    bool get_graduation_status() const;
+
+
 private:
     std::string full_name_;
     std::string last_name_;
@@ -68,11 +127,10 @@ private:
     std::string email_;
     const int account_number_;
 
-    // Most probably you will need here an attribute (e.g. vector) containing 
-    // courses the account has signed up for (either completed or uncompleted
-    // or both)
+    std::vector<Course*> signed_courses_;
+    std::vector<Course*> completed_courses_;
+    bool graduated_;
+
 };
 
 #endif // ACCOUNT_HH
-
-

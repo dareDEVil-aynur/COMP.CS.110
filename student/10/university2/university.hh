@@ -6,7 +6,25 @@
  *
  * Note: Students shouldn't need to make changes to the existing functions
  * or their implementations.
+ *
+ * Overview:
+ *   The code embodies a University class which governs the courses and
+ * student accounts within the system. It includes methods to construct
+ * both courses and student accounts, integrate students and staff into
+ * courses, enroll and complete courses, along with delivering details about
+ * courses and accounts.
+ *   During each interactive cycle, the software solicits user engagement
+ * via commands, which can be displayed by typing "help" or "h". This
+ * University class leverages both the Account and Course classes to manage
+ * student data and respond appropriately to user commands.
+ * The application concludes once the user initiates a quit command ('q' or 'Q').
+ *
+ * Name: Aynur Rahman Talukdar
+ * Student number: 150189473
+ * UserID: qkayta
+ * E-Mail: aynurrahman.talukdar@tuni.fi
  * */
+
 #ifndef UNIVERSITY_HH
 #define UNIVERSITY_HH
 
@@ -154,5 +172,3 @@ private:
 };
 
 #endif // UNIVERSITY_HH
-
-

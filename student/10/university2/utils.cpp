@@ -76,4 +76,3 @@ std::string Utils::to_lower(const std::string &s)
     }
     return result;
 }
-

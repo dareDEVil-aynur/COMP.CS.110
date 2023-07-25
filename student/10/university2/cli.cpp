@@ -170,5 +170,3 @@ bool Cli::read_from_file(const std::string &filename)
 
     return true;
 }
-
-

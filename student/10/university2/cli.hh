@@ -126,5 +126,3 @@ private:
 };
 
 #endif // CLI_HH
-
-

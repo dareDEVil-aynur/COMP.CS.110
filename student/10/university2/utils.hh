@@ -55,4 +55,3 @@ std::string to_lower(const std::string& str);
 }
 
 #endif // UTILS_HH
-
